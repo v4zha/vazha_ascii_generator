@@ -13,6 +13,12 @@ ACX=99
 ACY=15
 #tot_char set
 TOT_CHAR_SET={'-','|','\\','/','=',"^"}
+#colors :)
+END='\033[0m'
+GREEN='\033[92m'
+YELLOW='\033[93m'
+RED='\033[91m'
+CYAN='\033[96m'
 
 def mirror_leaf(leaf):
 	org_x=0
@@ -57,6 +63,16 @@ def rotate_leaf(leaf,rot_fac):
 	"""
 	return leaf_rot
 
+def vazha_color(ascii_char):	
+	if ascii_char=="^" or ascii_char=="-":
+		return GREEN+ascii_char+END
+	elif ascii_char in ['|','\\','=']:
+		return YELLOW+ascii_char+END
+	if ascii_char=="||":
+		return RED+ascii_char+END
+	else:
+		return ascii_char	
+
 def attach_leaf(leaf,rot_fac,mirror=False):
 	leaf_shift=[[" " for x in range(X_MAX)] for y in range(Y_MAX)]	
 	LX_MAX,LY_MAX=get_max(leaf)
@@ -99,12 +115,12 @@ def attach_stem(canvas):
 	#max width => 3
 	for y in range(OY,Y_MAX):
 		if y>=Y_MAX-(Y_MAX/3):
-				width=2
+				width=1
 		if  y>= Y_MAX-(Y_MAX/10):
-				width=3
+				width=2
 		for i in range(width):
-				canvas[y][OX-width]="|"
-				canvas[y][OX+width]="|"
+				canvas[y][OX-width]="||"
+				canvas[y][OX+width]="||"
 
 def append_tree(tree,canvas):
 	for y in range(Y_MAX):
@@ -162,16 +178,17 @@ def draw_tree():
 	#attach stem
 	attach_stem(canvas)
 	append_tree(tree,canvas)
-	for y in range(6,Y_MAX):
-		for x in range(50,X_MAX):
-			print(tree[y][x],end="")
+	for y in range(6,Y_MAX):	
+		for x in range(50,X_MAX):		
+			print(vazha_color(tree[y][x]),end="")
 		print("")
 	
+
 	print(" "*30,end="")
-	print("="*40)
+	print(CYAN+"="*40+END)
 	print(" "*46,end="")
 	print("AL_VAZHA")
 	print(" "*30,end="")
-	print("="*40)
+	print(CYAN+"="*40+END)
 
 draw_tree()	
